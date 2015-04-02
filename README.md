@@ -3,15 +3,83 @@ DoSomething Web
 
 DoSomething.org Web server.
 
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
-
 Role Variables
 --------------
+### Composer
+#### Composer path
+A path to install composer.  
+Defaults to `/usr/local/bin`.
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yml
+composer_path: '/usr/bin'
+```
+
+#### Composer self update
+
+Run `composer self-update`.  
+Defaults to `no`.
+
+```yml
+composer_self_update: yes
+```
+
+### PHP
+#### php.ini settings
+
+You can override `/etc/php5/fpm/php.ini` settings
+(or introduce new configuration statements) using the following format:
+
+```yml
+php_ini_settings:
+  - section: PHP
+    option: upload_max_filesize
+    value: 10M
+  - section: PHP
+    option: display_errors
+    value: "On"
+  - section: Date
+    option: date.timezone
+    value: "America/New_York"
+```
+
+#### FPM Pool
+
+You can override `/etc/php5/fpm/pool.d/www.conf` settings
+(or introduce new configuration statements) using the following format:
+
+```yml
+php_fpm_settings:
+  - { option: user,   value: "app" }
+  - { option: group,  value: "app" }
+```
+
+#### FPM Socket
+A path to PHP-fpm socket.  
+Defaults to `/var/run/php5-fpm.sock`.
+
+```yml
+php_fpm_socket: /var/run/application.sock
+```
+
+### PHP Extensions
+By default, only `php5-curl` is installed. To include additional extensions,
+override `php_extensions`:
+
+```yml
+php_extensions:
+  - php5-mysql
+  - php5-gd
+```
+
+### PHP Third Party Extensions
+#### New Relic
+Install [PHP New Relic](https://docs.newrelic.com/docs/agents/php-agent/getting-started/new-relic-php)
+extenstion.  
+Defaults to `no`.
+
+```yml
+php_thirdparty_newrelic: yes
+```
 
 Dependencies
 ------------
@@ -21,11 +89,13 @@ Dependencies
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Usage example:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yml
+- hosts: servers
+  roles:
+     - { role: dosomething.web, php_thirdparty_newrelic: yes }
+```
 
 License
 -------
