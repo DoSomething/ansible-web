@@ -28,6 +28,7 @@
     dest=/etc/newrelic/nrsysmond.cfg
     regexp="^license_key"
     line='license_key={{ php_thirdparty_newrelic_license }}'
+  notify: restart newrelic-sysmond
   when: php_thirdparty_newrelic
 
 - name: PHP Third Party | New Relic | Setup New Relic PHP Agent License
