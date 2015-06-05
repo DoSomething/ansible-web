@@ -19,7 +19,7 @@
 
 - name: PHP Third Party | New Relic | Install New Relic server agent
   sudo: yes
-  apt: name=newrelic-sysmond state=latest
+  apt: name=newrelic-sysmond state=latest force=yes
   when: php_thirdparty_newrelic
 
 - name: PHP Third Party | New Relic | Setup New Relic Server Monitor License
